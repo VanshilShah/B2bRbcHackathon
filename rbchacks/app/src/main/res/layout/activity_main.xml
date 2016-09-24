@@ -9,7 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.vanshil.rbchacks.MainActivity">
 
-    <com.vanshil.rbchacks.common.NonSwipeableViewPagers
+    <com.vanshil.rbchacks.common.NonSwipeableViewPager
 
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
@@ -20,6 +20,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="top" />
-    </com.vanshil.rbchacks.common.NonSwipeableViewPagers>
+    </com.vanshil.rbchacks.common.NonSwipeableViewPager>
 
 </RelativeLayout>
