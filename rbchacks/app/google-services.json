@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "959608777071",
+    "firebase_url": "https://rbchacks.firebaseio.com",
+    "project_id": "rbchacks",
+    "storage_bucket": "rbchacks.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959608777071:android:058b6336b8ef18f6",
+        "android_client_info": {
+          "package_name": "com.vanshil.rbchacks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959608777071-m2ei5dm842bleu8l9f8ndmr73t21cci0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCUziemNROas7VkQ21rhjPAYCNiD0m3VGA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
