@@ -1,5 +1,6 @@
 package com.vanshil.rbchacks.controllers;
 
+import com.vanshil.rbchacks.models.Product;
 import com.vanshil.rbchacks.models.Store;
 import com.vanshil.rbchacks.network.FirebaseService;
 import com.vanshil.rbchacks.network.LoggingInterceptor;
@@ -46,6 +47,46 @@ public class FirebaseManager {
 
     }
 
+    public void getProducts(String search){
+        //oString[] keywords = search.split(" ");
+        final List<Integer> productsFound = new ArrayList<>();
+        Callback<List<Integer>> keywordCallback = new Callback<List<Integer>>() {
+            @Override
+            public void onResponse(Call<List<Integer>> call, Response<List<Integer>> response) {
+                if(response.body()!=null){
+                    productsFound.addAll(response.body());
+                }
+                Call productCall = firebaseService.getProducts();
+                productCall.enqueue(new Callback<List<Product>>() {
+                    @Override
+                    public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
+                        List<Product> result = response.body();
+                        List<Product> toReturn = new ArrayList<Product>();
+                        for(Integer productIndex : productsFound){
+                            toReturn.add(result.get(productIndex));
+                        }
+                        listeners.get(0).notifyProductsFound(toReturn);
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Product>> call, Throwable t) {
+
+                    }
+                });
+
+            }
+
+            @Override
+            public void onFailure(Call<List<Integer>> call, Throwable t) {
+
+            }
+        };
+        Call call = firebaseService.getProductsByKeywords(search);
+        call.enqueue(keywordCallback);
+
+    }
+
     public void getStore(int id){
         loadStore(id);
     }
@@ -55,7 +96,7 @@ public class FirebaseManager {
             @Override
             public void onResponse(Call<Store> call, Response<Store> businessResponse) {
 
-                notifyStoreLoaded(businessResponse.body());
+                notifyStoresLoaded(businessResponse.body());
             }
 
             @Override
@@ -67,6 +108,8 @@ public class FirebaseManager {
         storeCall.enqueue(storeCallback);
     }
 
+
+
     public void unregister(Listener listener){
         if(listeners.indexOf(listener) != -1){
             listeners.remove(listener);
@@ -77,12 +120,13 @@ public class FirebaseManager {
             listeners.add(listener);
         }
     }
-    private void notifyStoreLoaded(Store businesses){
+    private void notifyStoresLoaded(Store businesses){
         for(Listener listener: listeners){
             listener.notifyStoreLoaded(businesses);
         }
     }
     public interface Listener{
         void notifyStoreLoaded(Store store);
+        void notifyProductsFound(List<Product> products);
     }
 }

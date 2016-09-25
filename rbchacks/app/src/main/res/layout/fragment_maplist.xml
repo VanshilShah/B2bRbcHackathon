@@ -1,0 +1,35 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/frameLayout"
+    tools:context=".MapListFragment">
+
+    <com.vanshil.rbchacks.common.NonSwipeableViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v4.view.PagerTabStrip
+            android:id="@+id/pager_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:background="@color/colorPrimary"/>
+
+    </com.vanshil.rbchacks.common.NonSwipeableViewPager>
+
+
+    <EditText
+        android:id="@+id/search"
+        android:elevation="3dp"
+        android:layout_marginBottom="2dp"
+        android:hint="Search for a product or service"
+        android:padding="15dp"
+        android:layout_margin="10dp"
+        android:layout_gravity="bottom"
+        android:background="@android:color/transparent"
+        android:textSize="@dimen/text_large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</FrameLayout>

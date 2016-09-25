@@ -2,18 +2,20 @@ package com.vanshil.rbchacks;
 
 import android.app.Activity;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,19 +29,17 @@ import com.vanshil.rbchacks.common.BaseActivity;
 import com.vanshil.rbchacks.common.NonSwipeableViewPager;
 import com.vanshil.rbchacks.controllers.FirebaseManager;
 import com.vanshil.rbchacks.dummy.DummyContent;
+import com.vanshil.rbchacks.models.Product;
 import com.vanshil.rbchacks.models.Store;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import java.util.List;
 
-public class MainActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, BusinessItemFragment.OnListFragmentInteractionListener,  NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class MainActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, BusinessItemFragment.OnListFragmentInteractionListener,  NavigationDrawerFragment.NavigationDrawerCallbacks, MyProfile.MyProfileFragmentInteractionListener, MapListFragment.OnFragmentInteractionListener{
 
     SupportMapFragment mapFragment;
     GoogleMap map;
     LatLng latlng;
     Marker myLocation;
-    @BindView(R.id.view_pager)
-    NonSwipeableViewPager viewPager;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -54,7 +54,6 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)  getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -76,44 +75,27 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
                 initializeIfReady();
             }
         };
-        initializeViewPager();
         firebaseManager.getStore(0);
         firebaseListener = new FirebaseManager.Listener() {
             @Override
             public void notifyStoreLoaded(Store store) {
                 Log.d(TAG, store.getName());
             }
+
+            @Override
+            public void notifyProductsFound(List<Product> products) {
+
+            }
         };
-    }
-    private void initializeViewPager(){
-        final Fragment[] fragments = {mapFragment, new BusinessItemFragment()};
-
-        viewPager.setAdapter(new FragmentPagerAdapter(getSupportFragmentManager()) {
-            @Override
-            public Fragment getItem(int position) {
-                return fragments[position];
-            }
-
-            @Override
-            public int getCount() {
-                return 2;
-            }
-
-            @Override
-            public CharSequence getPageTitle(int position) {
-                return position==0?"Map":"List";
-            }
-
-        });
-
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
+        final Fragment[] fragments = {MapListFragment.newInstance(0), MyProfile.newInstance()};
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, fragments[position])
                 .commit();
     }
 
@@ -125,9 +107,6 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
             case 2:
                 mTitle = getString(R.string.title_section2);
                 break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
         }
     }
 
@@ -136,35 +115,6 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main2, menu);
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private void initializeIfReady(){
@@ -198,43 +148,85 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
 
     }
 
+    @Override
+    public void onMyProfileFragmentInteraction(Uri uri) {
+
+    }
+
+    @Override
+    public void onMapListFragmentInteraction(Uri uri) {
+
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+    public static class MapListFragment extends Fragment {
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
+        NonSwipeableViewPager viewPager;
+        EditText searchEdit;
+        public static MapListFragment newInstance(int sectionNumber) {
+            MapListFragment fragment = new MapListFragment();
             Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
             fragment.setArguments(args);
             return fragment;
         }
 
-        public PlaceholderFragment() {
+        public MapListFragment() {
         }
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_maplist, container, false);
+            viewPager = (NonSwipeableViewPager)rootView.findViewById(R.id.view_pager);
+            searchEdit = (EditText)rootView.findViewById(R.id.search);
+            searchEdit.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    //FirebaseManager.getInstance().getProducts();
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    FirebaseManager.getInstance().getProducts(charSequence.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+
+                }
+            });
+            initializeViewPager();
             return rootView;
         }
 
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((MainActivity) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+        public void initializeViewPager(){
+            final Fragment[] fragments = {((MainActivity)getActivity()).mapFragment, new BusinessItemFragment()};
+            //NonSwipeableViewPager viewPager = new NonSwipeableViewPager(getActivity());
+            viewPager.setAdapter(new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
+                @Override
+                public Fragment getItem(int position) {
+                    return fragments[position];
+                }
+
+                @Override
+                public int getCount() {
+                    return 2;
+                }
+
+                @Override
+                public CharSequence getPageTitle(int position) {
+                    return position==0?"Map":"List";
+                }
+
+            });
+
         }
 
     }

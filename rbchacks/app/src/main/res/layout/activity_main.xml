@@ -11,20 +11,6 @@
         android:layout_height="match_parent" >
 
     </FrameLayout>
-
-        <com.vanshil.rbchacks.common.NonSwipeableViewPager
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <android.support.v4.view.PagerTabStrip
-                android:id="@+id/pager_header"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                android:background="@color/colorPrimary"/>
-
-        </com.vanshil.rbchacks.common.NonSwipeableViewPager>
-
     <fragment android:id="@+id/navigation_drawer"
         android:layout_width="@dimen/navigation_drawer_width" android:layout_height="match_parent"
         android:layout_gravity="start" android:name="com.vanshil.rbchacks.NavigationDrawerFragment"

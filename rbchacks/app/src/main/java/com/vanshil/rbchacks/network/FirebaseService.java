@@ -16,11 +16,14 @@ import retrofit2.http.Path;
  */
 public interface FirebaseService {
 
-    @GET("/stores/{storeID}/{productID}.json")
-    Call<Product> getProduct(@Path("storeID") int storeID, @Path("productID") int productID);
+    @GET("/products.json")
+    Call<List<Product>> getProducts();
 
     @GET("/stores/{storeID}.json")
     Call<Store> getStore(@Path("storeID") int storeID);
+
+    @GET("/keywords/{name}.json")
+    Call<List<Integer>> getProductsByKeywords(@Path("name") String name);
 
     @POST("/keywords/{name}.json")
     Call<Integer> addKeyword(@Path("name") String name, @Body String path);
