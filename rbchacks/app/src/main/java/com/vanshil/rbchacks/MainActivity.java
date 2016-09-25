@@ -32,6 +32,7 @@ import com.vanshil.rbchacks.dummy.DummyContent;
 import com.vanshil.rbchacks.models.Product;
 import com.vanshil.rbchacks.models.Store;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, BusinessItemFragment.OnListFragmentInteractionListener,  NavigationDrawerFragment.NavigationDrawerCallbacks, MyProfile.MyProfileFragmentInteractionListener, MapListFragment.OnFragmentInteractionListener{
@@ -40,6 +41,7 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
     GoogleMap map;
     LatLng latlng;
     Marker myLocation;
+    public static List<Product> products = new ArrayList<>();
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -84,7 +86,11 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
 
             @Override
             public void notifyProductsFound(List<Product> products) {
+                for(Product product : products){
+                    LatLng latLng = new LatLng(product.getLatitude(), product.getLongitude());
+                    myLocation = map.addMarker(new MarkerOptions().position(latlng).title(product.getName()).icon(BitmapDescriptorFactory.fromResource(R.mipmap.location_icon_blue_small_border)));
 
+                }
             }
         };
     }
@@ -212,12 +218,12 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
             viewPager.setAdapter(new FragmentPagerAdapter(getActivity().getSupportFragmentManager()) {
                 @Override
                 public Fragment getItem(int position) {
-                    return fragments[position];
+                    return fragments[0];
                 }
 
                 @Override
                 public int getCount() {
-                    return 2;
+                    return 1;
                 }
 
                 @Override
@@ -225,6 +231,17 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
                     return position==0?"Map":"List";
                 }
 
+            });
+            FirebaseManager.getInstance().register(new FirebaseManager.Listener() {
+                @Override
+                public void notifyStoreLoaded(Store store) {
+
+                }
+
+                @Override
+                public void notifyProductsFound(List<Product> products) {
+
+                }
             });
 
         }

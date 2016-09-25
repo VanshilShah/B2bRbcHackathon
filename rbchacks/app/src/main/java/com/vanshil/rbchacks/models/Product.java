@@ -21,6 +21,30 @@ public class Product {
     @SerializedName("keywords")
     List<String> keywords;
 
+    @Expose
+    @SerializedName("latitude")
+    double latitude;
+
+    @Expose
+    @SerializedName("longitude")
+    double longitude;
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
     public Product(String name, String storeID, List<String> keywords) {
         this.name = name;
         this.storeID = storeID;

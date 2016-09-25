@@ -65,7 +65,12 @@ public class FirebaseManager {
                         for(Integer productIndex : productsFound){
                             toReturn.add(result.get(productIndex));
                         }
-                        listeners.get(0).notifyProductsFound(toReturn);
+                        for (Listener listener: listeners){
+                            if(listener != null) {
+                                listener.notifyProductsFound(toReturn);
+                            }
+                        }
+
 
                     }
 
