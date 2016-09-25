@@ -64,8 +64,8 @@ public class BusinessItemViewAdapter extends RecyclerView.Adapter<BusinessItemVi
         public ViewHolder(View view) {
             super(view);
             mView = view;
-            mIdView = (TextView) view.findViewById(R.id.id);
-            mContentView = (TextView) view.findViewById(R.id.content);
+            mIdView = (TextView) view.findViewById(R.id.name);
+            mContentView = (TextView) view.findViewById(R.id.product_name);
         }
 
         @Override

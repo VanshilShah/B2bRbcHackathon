@@ -35,7 +35,7 @@ public class FirebaseManager {
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new LoggingInterceptor()).build();
 
         firebaseService = new Retrofit.Builder()
-                .baseUrl("https://rbchacks.firebaseio.com/rbchacks")
+                .baseUrl("https://rbchacks.firebaseio.com/rbchacks/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build()
