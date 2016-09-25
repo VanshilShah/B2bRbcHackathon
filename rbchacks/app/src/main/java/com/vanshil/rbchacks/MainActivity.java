@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +25,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vanshil.rbchacks.common.BaseActivity;
 import com.vanshil.rbchacks.common.NonSwipeableViewPager;
+import com.vanshil.rbchacks.controllers.FirebaseManager;
 import com.vanshil.rbchacks.dummy.DummyContent;
+import com.vanshil.rbchacks.models.Store;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,6 +77,13 @@ public class MainActivity extends BaseActivity implements OnMapReadyCallback, Go
             }
         };
         initializeViewPager();
+        firebaseManager.getStore(0);
+        firebaseListener = new FirebaseManager.Listener() {
+            @Override
+            public void notifyStoreLoaded(Store store) {
+                Log.d(TAG, store.getName());
+            }
+        };
     }
     private void initializeViewPager(){
         final Fragment[] fragments = {mapFragment, new BusinessItemFragment()};

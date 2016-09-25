@@ -16,7 +16,7 @@ public class BaseActivity extends AppCompatActivity {
     LocationManager locationManager;
 
     protected FirebaseManager.Listener firebaseListener;
-    FirebaseManager firebaseManager;
+    protected FirebaseManager firebaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

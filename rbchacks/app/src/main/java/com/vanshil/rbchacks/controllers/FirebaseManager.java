@@ -1,6 +1,5 @@
 package com.vanshil.rbchacks.controllers;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.vanshil.rbchacks.models.Store;
 import com.vanshil.rbchacks.network.FirebaseService;
 import com.vanshil.rbchacks.network.LoggingInterceptor;
@@ -9,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.OkHttpClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -21,7 +23,7 @@ public class FirebaseManager {
     private List<Listener> listeners;
 
     FirebaseService firebaseService;
-    private List<Store> businesses;
+    private List<Store> store;
 
     public static FirebaseManager getInstance(){
         if(instance == null){
@@ -44,35 +46,25 @@ public class FirebaseManager {
 
     }
 
-    public List<Store> getBusinesses(){
-        if(businesses == null){
-            businesses = new ArrayList<>();
-            loadBusinesses();
-        }
-        return businesses;
+    public void getStore(int id){
+        loadStore(id);
     }
 
-    public void loadBusinesses(){
-        /*Callback<BusinessResponse> businessCallback = new Callback<BusinessResponse>() {
+    public void loadStore(int id){
+        Callback<Store> storeCallback = new Callback<Store>() {
             @Override
-            public void onResponse(Call<BusinessResponse> call, Response<BusinessResponse> businessResponse) {
-                for(BusinessResponse.BusinessResult businessResult: businessResponse.body().getResult()){
-                    businessResult.getLatLng();
-                }
-                notifyBusinessLoaded(businessResponse.body().getResult());
+            public void onResponse(Call<Store> call, Response<Store> businessResponse) {
+
+                notifyStoreLoaded(businessResponse.body());
             }
 
             @Override
-            public void onFailure(Call<BusinessResponse> call, Throwable t) {
+            public void onFailure(Call<Store> call, Throwable t) {
 
             }
         };
-        Call<BusinessResponse> zeusCall = zeusService.getBusinesses();
-        zeusCall.enqueue(businessCallback);*/
-    }
-
-    public void postLocation(String logID, LatLng latlng){
-
+        Call<Store> storeCall = firebaseService.getStore(id);
+        storeCall.enqueue(storeCallback);
     }
 
     public void unregister(Listener listener){
@@ -85,12 +77,12 @@ public class FirebaseManager {
             listeners.add(listener);
         }
     }
-    private void notifyStoresLoaded(List<Store> businesses){
+    private void notifyStoreLoaded(Store businesses){
         for(Listener listener: listeners){
-            listener.notifyBusinessLoaded(businesses);
+            listener.notifyStoreLoaded(businesses);
         }
     }
     public interface Listener{
-        void notifyBusinessLoaded(List<Store> businesses);
+        void notifyStoreLoaded(Store store);
     }
 }
