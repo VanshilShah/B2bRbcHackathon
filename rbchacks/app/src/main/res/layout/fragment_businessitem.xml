@@ -1,20 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:elevation="4dp"
+    android:layout_height="100dp"
+    android:layout_marginBottom="8dp"
+    android:background="@android:color/white"
     android:orientation="horizontal">
 
-    <TextView
+    <ImageView
         android:id="@+id/id"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="10dp"
+        android:src="@mipmap/ic_launcher"/>
+    <View
+        android:background="@color/blueDark"
+        android:layout_margin="4dp"
+        android:layout_width="2dp"
+        android:layout_height="match_parent"/>
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blueDark"
+            android:layout_marginTop="@dimen/text_margin"
+            android:textSize="@dimen/text_large"
+            android:text="Business Name"/>
+        <TextView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blueDark"
+            android:layout_marginTop="4dp"
+            android:text="Location"
+            android:textSize="@dimen/text_smedium"/>
+        <TextView
+            android:id="@+id/product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/blueDark"
+            android:layout_marginTop="8dp"
+            android:text="Product Name"
+            android:textSize="@dimen/text_medium" />
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
 </LinearLayout>

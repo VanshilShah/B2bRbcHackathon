@@ -28,7 +28,6 @@ import com.vanshil.rbchacks.dummy.DummyContent;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.http.HEAD;
 
 public class MainActivity extends BaseActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, BusinessItemFragment.OnListFragmentInteractionListener,  NavigationDrawerFragment.NavigationDrawerCallbacks {
 

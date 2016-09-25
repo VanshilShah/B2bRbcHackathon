@@ -4,4 +4,9 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="navigation_drawer_width">240dp</dimen>
+    <dimen name="text_large">18dp</dimen>/
+    <dimen name="text_medium">14dp</dimen>
+    <dimen name="text_smedium">12dp</dimen>
+    <dimen name="text_small">10dp</dimen>
+
 </resources>
